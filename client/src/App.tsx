@@ -79,16 +79,17 @@ function App() {
 
           {/* Mobile Bottom Sheet / Drawer */}
           <div
-            className={`md:hidden fixed inset-x-0 bottom-0 z-50 transform transition-transform duration-300 ease-in-out bg-gray-900 border-t border-gray-800 rounded-t-2xl shadow-2xl h-[80vh] ${isMobileOpen ? 'translate-y-0' : 'translate-y-full'}`}
+            className={`md:hidden fixed inset-x-0 bottom-0 z-50 transform transition-transform duration-300 ease-out bg-gray-900/95 backdrop-blur-xl border-t border-white/10 rounded-t-3xl shadow-[0_-10px_40px_rgba(0,0,0,0.5)] h-[85vh] flex flex-col ${isMobileOpen ? 'translate-y-0' : 'translate-y-full'}`}
           >
             {/* Mobile Handle to close */}
             <div
-              className="w-full h-6 flex justify-center items-center cursor-pointer"
+              className="w-full h-8 flex justify-center items-center cursor-pointer hover:bg-white/5 transition-colors rounded-t-3xl touch-none"
               onClick={() => setIsMobileOpen(false)}
             >
-              <div className="w-12 h-1.5 bg-gray-700 rounded-full" />
+              <div className="w-16 h-1.5 bg-gray-700 rounded-full" />
             </div>
-            <div className="h-full overflow-hidden pb-8">
+
+            <div className="flex-1 overflow-hidden pb-safe">
               <InspectorPanel
                 selectedElement={selectedElement}
                 inspectMode={inspectMode}
@@ -99,13 +100,17 @@ function App() {
             </div>
           </div>
 
-          {/* Mobile FAB to toggle Inspector if closed but element selected */}
-          {!isMobileOpen && selectedElement && (
+          {/* Mobile FAB to toggle Inspector */}
+          {!isMobileOpen && (
             <button
               onClick={() => setIsMobileOpen(true)}
-              className="md:hidden fixed bottom-6 right-6 bg-blue-600 text-white p-4 rounded-full shadow-lg z-40 hover:bg-blue-500 transition-colors animate-bounce"
+              className="md:hidden fixed bottom-6 right-6 bg-blue-600 text-white p-4 rounded-full shadow-lg shadow-blue-600/30 z-40 hover:bg-blue-500 active:scale-95 transition-all animate-in fade-in zoom-in duration-300"
             >
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16m-7 6h7" /></svg>
+              {selectedElement ? (
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
+              ) : (
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16m-7 6h7" /></svg>
+              )}
             </button>
           )}
 

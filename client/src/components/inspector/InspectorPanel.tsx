@@ -23,27 +23,30 @@ export default function InspectorPanel({ selectedElement, inspectMode, setInspec
     return (
         <div className="flex flex-col h-full bg-gray-950/80 backdrop-blur-xl border-l border-gray-800/50 text-gray-300 w-full">
             {/* Main Header */}
-            <div className="p-3 border-b border-gray-800/50 bg-gray-900/30">
+            <div className="shrink-0 p-3 border-b border-white/5 bg-gray-900/40 backdrop-blur-md">
                 <div className="flex justify-between items-center mb-3">
-                    <h2 className="font-bold text-lg bg-gradient-to-r from-pink-400 to-blue-400 bg-clip-text text-transparent tracking-wide">
-                        Xcrape
+                    <h2 className="font-bold text-lg bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent tracking-tight">
+                        Xcrape DevTools
                     </h2>
                 </div>
 
-                {/* Tabs */}
-                <div className="flex gap-1 overflow-x-auto scrollbar-none pb-1">
+                {/* Scrollable Tabs */}
+                <div className="flex gap-2 overflow-x-auto scrollbar-none pb-1 mask-linear-fade">
                     {['elements', 'console', 'sources', 'network', 'storage'].map((tab) => (
                         <button
                             key={tab}
                             onClick={() => setActiveTab(tab as Tab)}
                             className={`
-                                px-3 py-1.5 rounded-md text-xs font-semibold capitalize transition-all whitespace-nowrap
+                                relative px-4 py-2 rounded-lg text-xs font-semibold capitalize transition-all whitespace-nowrap active:scale-95
                                 ${activeTab === tab
-                                    ? 'bg-blue-600/20 text-blue-400 border border-blue-500/30 shadow-sm'
-                                    : 'text-gray-500 hover:text-gray-300 hover:bg-white/5'}
+                                    ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/20 ring-1 ring-blue-400/50'
+                                    : 'text-gray-400 hover:text-gray-100 hover:bg-white/5'}
                             `}
                         >
                             {tab}
+                            {activeTab === tab && (
+                                <div className="absolute inset-0 rounded-lg bg-white/10 animate-pulse-slow pointer-events-none" />
+                            )}
                         </button>
                     ))}
                 </div>
