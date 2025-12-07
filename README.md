@@ -1,4 +1,4 @@
-# Xcrape - Visual Web Scraper & Code Generator
+# Skopeo - Visual Web Scraper & Code Generator
 
 A visual tool to help developers generate web scraping code (Python/BeautifulSoup or Selenium) by simply pointing and clicking on a target webpage.
 

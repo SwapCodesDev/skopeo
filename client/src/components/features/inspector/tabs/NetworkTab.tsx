@@ -51,9 +51,9 @@ export default function NetworkTab() {
         if (filter === 'all') return true;
         if (filter === 'fetch') return req.type === 'fetch';
         if (filter === 'xhr') return req.type === 'xhr';
-        if (filter === 'js') return req.type === 'script' || req.url.endsWith('.js');
-        if (filter === 'css') return req.type === 'css' || req.url.endsWith('.css');
-        if (filter === 'img') return req.type === 'image' || req.url.match(/\.(png|jpg|jpeg|gif|svg|webp)$/i);
+        if (filter === 'js') return req.type === 'script' || req.url?.endsWith('.js');
+        if (filter === 'css') return req.type === 'css' || req.url?.endsWith('.css');
+        if (filter === 'img') return req.type === 'image' || req.url?.match(/\.(png|jpg|jpeg|gif|svg|webp)$/i);
         if (filter === 'media') return req.type === 'video' || req.type === 'audio';
         return true;
     });
@@ -107,8 +107,8 @@ export default function NetworkTab() {
                                         {req.status || (req.status === 0 ? 'ERR' : '...')}
                                     </td>
                                     <td className="p-2 text-gray-500">{req.type}</td>
-                                    <td className="p-2 text-gray-300 truncate" title={req.url}>
-                                        {req.url.split('/').pop() || req.url}
+                                    <td className="p-2 text-gray-300 truncate" title={req.url || ''}>
+                                        {req.url?.split('/').pop() || req.url || 'Unknown'}
                                     </td>
                                     <td className="p-2 text-right text-gray-500">
                                         {req.duration ? `${Math.round(req.duration)}ms` : '-'}
@@ -204,6 +204,6 @@ export default function NetworkTab() {
                     </div>
                 )}
             </div>
-        </div>
+        </div >
     );
 }

@@ -10,7 +10,7 @@ export const HistoryManager = ({ currentUrl, onSelectUrl }: HistoryManagerProps)
     const [isOpen, setIsOpen] = useState(false);
 
     useEffect(() => {
-        const saved = localStorage.getItem('xcrape_history');
+        const saved = localStorage.getItem('skopeo_history');
         if (saved) {
             setHistory(JSON.parse(saved));
         }
@@ -21,14 +21,14 @@ export const HistoryManager = ({ currentUrl, onSelectUrl }: HistoryManagerProps)
 
         setHistory(prev => {
             const newHistory = [currentUrl, ...prev.filter(u => u !== currentUrl)].slice(0, 10);
-            localStorage.setItem('xcrape_history', JSON.stringify(newHistory));
+            localStorage.setItem('skopeo_history', JSON.stringify(newHistory));
             return newHistory;
         });
     }, [currentUrl]);
 
     const clearHistory = () => {
         setHistory([]);
-        localStorage.removeItem('xcrape_history');
+        localStorage.removeItem('skopeo_history');
     };
 
     if (history.length === 0) return null;

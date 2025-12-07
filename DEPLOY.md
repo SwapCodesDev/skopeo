@@ -1,6 +1,6 @@
-# Deploying Xcrape to Vercel
+# Deploying Skopeo to Vercel
 
-Xcrape is configured to be easily deployed on Vercel as a monorepo containing both a React Frontend and an Express Backend.
+Skopeo is configured to be easily deployed on Vercel as a monorepo containing both a React Frontend and an Express Backend.
 
 ## Prerequisites
 

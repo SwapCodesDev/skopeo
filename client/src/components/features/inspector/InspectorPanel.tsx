@@ -19,7 +19,7 @@ export default function InspectorPanel() {
             <div className="shrink-0 p-3 border-b border-white/5 bg-gray-900/40 backdrop-blur-md">
                 <div className="flex justify-between items-center mb-3">
                     <h2 className="font-bold text-lg bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent tracking-tight">
-                        Xcrape DevTools
+                        Skopeo DevTools
                     </h2>
                 </div>
 

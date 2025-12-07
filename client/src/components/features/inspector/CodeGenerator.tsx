@@ -40,26 +40,38 @@ export const CodeGenerator = ({ element, extractors, url }: CodeGeneratorProps) 
             return `data = {${dict}}\n    print(data)`;
         };
 
+        // Escape quotes to prevent syntax errors
+        const safeUrl = (url || 'TARGET_URL').replace(/"/g, '\\"');
+        const safeSel = sel.replace(/"/g, '\\"');
+
         if (mode === 'bs4') {
-            return `import requests
+            return `# Python Script (BeautifulSoup)
+import requests
 from bs4 import BeautifulSoup
 
-url = "${url || 'TARGET_URL'}"
+url = "${safeUrl}"
 resp = requests.get(url)
 soup = BeautifulSoup(resp.text, "html.parser")
 
-elements = soup.select("${sel}")
+elements = soup.select("${safeSel}")
+
+print(f"Found {len(elements)} elements")
 
 for el in elements:
     ${formatExtraction('el', 'bs4')}`;
         } else if (mode === 'selenium') {
-            return `from selenium import webdriver
+            return `# Python Script (Selenium)
+from selenium import webdriver
 from selenium.webdriver.common.by import By
+import time
 
 driver = webdriver.Chrome()
-driver.get("${url || 'TARGET_URL'}")
+driver.get("${safeUrl}")
+time.sleep(2) # Wait for load
 
-elements = driver.find_elements(By.CSS_SELECTOR, "${sel}")
+elements = driver.find_elements(By.CSS_SELECTOR, "${safeSel}")
+
+print(f"Found {len(elements)} elements")
 
 for el in elements:
     ${formatExtraction('el', 'selenium')}
@@ -67,17 +79,21 @@ for el in elements:
 driver.quit()`;
         } else {
             // Playwright
-            return `from playwright.sync_api import sync_playwright
+            return `# Python Script (Playwright)
+from playwright.sync_api import sync_playwright
 
 with sync_playwright() as p:
-    browser = p.chromium.launch()
+    browser = p.chromium.launch(headless=False)
     page = browser.new_page()
-    page.goto("${url || 'TARGET_URL'}")
+    page.goto("${safeUrl}")
+    page.wait_for_selector("${safeSel}", timeout=5000)
 
-    elements = page.locator("${sel}")
+    elements = page.locator("${safeSel}")
     
     # Iterate over all matching elements
     count = elements.count()
+    print(f"Found {count} elements")
+
     for i in range(count):
         el = elements.nth(i)
         ${formatExtraction('el', 'playwright')}
@@ -129,6 +145,31 @@ with sync_playwright() as p:
                 >
                     {copied ? 'Copied!' : 'Copy'}
                 </Button>
+            </div>
+
+            {/* Output Preview */}
+            <div className="mt-4">
+                <h3 className="text-sm font-medium text-gray-400 mb-2">Output Preview <span className="text-xs text-gray-500 font-normal">(Based on current element)</span></h3>
+                <div className="bg-black/20 p-3 rounded-lg border border-gray-800 font-mono text-xs text-green-300 overflow-x-auto whitespace-pre-wrap">
+                    {(() => {
+                        if (!element || extractors.length === 0) return <span className="text-gray-500 italic">No data selected to extract</span>;
+
+                        const previewData: any = {};
+                        extractors.forEach(key => {
+                            if (key === 'innerText') previewData['innerText'] = element.innerText;
+                            else if (key === 'innerHTML') previewData['innerHTML'] = element.innerHTML; // truncating might be good
+                            else previewData[key] = element.attributes[key] || null;
+                        });
+
+                        if (extractors.length === 1) {
+                            // Single value output
+                            const val = Object.values(previewData)[0];
+                            return typeof val === 'string' ? `"${val}"` : String(val);
+                        }
+
+                        return JSON.stringify(previewData, null, 2);
+                    })()}
+                </div>
             </div>
         </div>
     );
