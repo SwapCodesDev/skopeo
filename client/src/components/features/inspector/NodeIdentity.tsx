@@ -1,4 +1,4 @@
-import type { ElementData } from '../../types';
+import type { ElementData } from '../../../types';
 
 interface NodeIdentityProps {
     element: ElementData;

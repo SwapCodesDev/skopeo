@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import type { TreeNode } from '../../types';
+import type { TreeNode } from '../../../types';
 
 interface TreeItemProps {
     node: TreeNode;

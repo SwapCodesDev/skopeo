@@ -1,5 +1,5 @@
-import { Checkbox } from '../ui/Checkbox';
-import type { ElementData } from '../../types';
+import { Checkbox } from '../../ui/Checkbox';
+import type { ElementData } from '../../../types';
 
 interface DataExtractorProps {
     element: ElementData;

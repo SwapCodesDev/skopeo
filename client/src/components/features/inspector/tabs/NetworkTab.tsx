@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import type { NetworkRequest } from '../../../types';
-import { Button } from '../../ui/Button';
+import type { NetworkRequest } from '../../../../types';
+import { Button } from '../../../ui/Button';
 
 type FilterType = 'all' | 'fetch' | 'xhr' | 'js' | 'css' | 'img' | 'media' | 'doc';
 

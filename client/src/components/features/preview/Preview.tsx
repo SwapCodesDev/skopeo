@@ -1,29 +1,31 @@
 import { useRef, useEffect, useState } from 'react';
-import type { ElementData } from '../types';
-import { useToast } from './Toast';
+import { useInspector } from '../../../context/InspectorContext';
+import { useLayout } from '../../../context/LayoutContext';
+import { useToast } from '../../common/Toast';
 
-interface PreviewProps {
-    url: string;
-    setUrl: (url: string) => void;
-    onElementSelect: (data: ElementData) => void;
-    inspectMode: boolean;
-}
-
-export default function Preview({ url, setUrl, onElementSelect, inspectMode }: PreviewProps) {
+export default function Preview() {
+    const { url, setUrl, setSelectedElement, inspectMode } = useInspector();
+    const { setIsMobileOpen } = useLayout();
     const [inputUrl, setInputUrl] = useState(url);
     const iframeRef = useRef<HTMLIFrameElement>(null);
     const [loading, setLoading] = useState(false);
     const { showToast } = useToast();
 
+    // Sync input local state with global url
+    useEffect(() => {
+        setInputUrl(url);
+    }, [url]);
+
     useEffect(() => {
         const handler = (event: MessageEvent) => {
             if (event.data?.type === 'ELEMENT_SELECTED') {
-                onElementSelect(event.data.payload);
+                setSelectedElement(event.data.payload);
+                setIsMobileOpen(true); // Auto-open on mobile select
             }
         };
         window.addEventListener('message', handler);
         return () => window.removeEventListener('message', handler);
-    }, [onElementSelect]);
+    }, [setSelectedElement, setIsMobileOpen]);
 
     useEffect(() => {
         // Send inspect mode toggle to iframe
@@ -63,6 +65,7 @@ export default function Preview({ url, setUrl, onElementSelect, inspectMode }: P
         setLoading(true);
     };
 
+    // Use a proxy or direct URL depending on env (assuming proxy setup exists)
     const proxyUrl = url ? `/proxy?url=${encodeURIComponent(url)}` : '';
 
     return (
@@ -112,3 +115,4 @@ export default function Preview({ url, setUrl, onElementSelect, inspectMode }: P
         </div>
     );
 }
+

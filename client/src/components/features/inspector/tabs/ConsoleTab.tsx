@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
-import type { ConsoleLog } from '../../../types';
-import { Button } from '../../ui/Button';
+import type { ConsoleLog } from '../../../../types';
+import { Button } from '../../../ui/Button';
 
 interface ConsoleTabProps {
     url?: string;

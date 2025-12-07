@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import { Button } from '../../ui/Button';
-import type { StorageItem } from '../../../types';
+import { Button } from '../../../ui/Button';
+import type { StorageItem } from '../../../../types';
 
 export default function StorageTab() {
     const [cookies, setCookies] = useState<StorageItem[]>([]);

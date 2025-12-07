@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { Button } from '../ui/Button';
-import { CodeBlock } from '../ui/CodeBlock';
-import type { ElementData, CodeMode } from '../../types';
+import { Button } from '../../ui/Button';
+import { CodeBlock } from '../../ui/CodeBlock';
+import type { ElementData, CodeMode } from '../../../types';
 
 interface CodeGeneratorProps {
     element: ElementData | null;

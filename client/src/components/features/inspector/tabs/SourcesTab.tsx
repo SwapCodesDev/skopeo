@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import { Button } from '../../ui/Button';
-import type { MediaAsset } from '../../../types';
+import { Button } from '../../../ui/Button';
+import type { MediaAsset } from '../../../../types';
 
 interface SourcesTabProps {
     url: string;

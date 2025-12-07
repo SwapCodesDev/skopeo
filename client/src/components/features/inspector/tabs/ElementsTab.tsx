@@ -4,8 +4,8 @@ import { XPathSearch } from '../XPathSearch';
 import { NodeIdentity } from '../NodeIdentity';
 import { DataExtractor } from '../DataExtractor';
 import { CodeGenerator } from '../CodeGenerator';
-import { Button } from '../../ui/Button';
-import type { ElementData } from '../../../types';
+import { Button } from '../../../ui/Button';
+import type { ElementData } from '../../../../types';
 
 interface ElementsTabProps {
     selectedElement: ElementData | null;

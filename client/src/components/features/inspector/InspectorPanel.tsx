@@ -5,19 +5,12 @@ import ConsoleTab from './tabs/ConsoleTab';
 import NetworkTab from './tabs/NetworkTab';
 import StorageTab from './tabs/StorageTab';
 import { HistoryManager } from './HistoryManager';
-import type { ElementData } from '../../types';
-
-interface InspectorPanelProps {
-    selectedElement: ElementData | null;
-    inspectMode: boolean;
-    setInspectMode: (val: boolean) => void;
-    url: string;
-    setUrl: (url: string) => void;
-}
+import { useInspector } from '../../../context/InspectorContext';
 
 type Tab = 'elements' | 'console' | 'sources' | 'network' | 'storage';
 
-export default function InspectorPanel({ selectedElement, inspectMode, setInspectMode, url, setUrl }: InspectorPanelProps) {
+export default function InspectorPanel() {
+    const { selectedElement, inspectMode, setInspectMode, url, setUrl } = useInspector();
     const [activeTab, setActiveTab] = useState<Tab>('elements');
 
     return (
@@ -74,3 +67,4 @@ export default function InspectorPanel({ selectedElement, inspectMode, setInspec
         </div>
     );
 }
+
