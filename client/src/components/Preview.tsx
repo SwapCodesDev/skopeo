@@ -63,7 +63,7 @@ export default function Preview({ url, setUrl, onElementSelect, inspectMode }: P
         setLoading(true);
     };
 
-    const proxyUrl = url ? `http://localhost:3000/proxy?url=${encodeURIComponent(url)}` : '';
+    const proxyUrl = url ? `/proxy?url=${encodeURIComponent(url)}` : '';
 
     return (
         <div className="flex flex-col h-full bg-gray-900 border-r border-gray-800">

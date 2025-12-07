@@ -14,7 +14,8 @@ class ProxyController {
                 return res.status(415).send(`Unsupported content type: ${contentType}. Please provide a URL to a web page.`);
             }
 
-            const injectedHtml = proxyService.injectScript(data, url);
+            const baseUrl = `${req.protocol}://${req.get('host')}`;
+            const injectedHtml = proxyService.injectScript(data, url, baseUrl);
             res.send(injectedHtml);
         } catch (error) {
             next(error);

@@ -21,7 +21,7 @@ class ProxyService {
         }
     }
 
-    injectScript(html, url) {
+    injectScript(html, url, baseUrl) {
         let processedHtml = html;
 
         // Inject Base Tag
@@ -33,7 +33,8 @@ class ProxyService {
         }
 
         // Inject Inspection Script
-        const scriptTag = `<script src="${config.SCRIPT_URL}"></script>`;
+        const scriptUrl = `${baseUrl}/js/inspect-script.js`;
+        const scriptTag = `<script src="${scriptUrl}"></script>`;
         if (processedHtml.includes('</body>')) {
             processedHtml = processedHtml.replace('</body>', `${scriptTag}</body>`);
         } else {

@@ -1,0 +1,35 @@
+{
+    "version": 2,
+    "builds": [
+        {
+            "src": "server/src/app.js",
+            "use": "@vercel/node",
+            "config": {
+                "includeFiles": [
+                    "server/public/**"
+                ]
+            }
+        },
+        {
+            "src": "client/package.json",
+            "use": "@vercel/static-build",
+            "config": {
+                "distDir": "dist"
+            }
+        }
+    ],
+    "routes": [
+        {
+            "src": "/proxy",
+            "dest": "/server/src/app.js"
+        },
+        {
+            "src": "/js/(.*)",
+            "dest": "/server/src/app.js"
+        },
+        {
+            "src": "/(.*)",
+            "dest": "/client/$1"
+        }
+    ]
+}
