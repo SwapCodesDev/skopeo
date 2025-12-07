@@ -4,6 +4,7 @@ const routes = require('./routes');
 const config = require('./config');
 
 const app = express();
+app.set('trust proxy', 1); // Trust first proxy (Vercel)
 
 // Middleware
 app.use(cors());

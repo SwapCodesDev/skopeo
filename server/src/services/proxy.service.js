@@ -24,15 +24,35 @@ class ProxyService {
     injectScript(html, url, baseUrl) {
         let processedHtml = html;
 
-        // Inject Base Tag
-        const origin = new URL(url).origin;
+        // Safety Shim (Patches History API & Console to prevent crashes/noise)
+        // Injected implicitly inline to run BEFORE any external scripts
+        const safetyShim = `
+            <script>
+                (function() {
+                    try {
+                        const noop = function() {};
+                        // Prevent target site from messing with history or crashing
+                        window.history.pushState = noop;
+                        window.history.replaceState = noop;
+                        
+                        // Optional: Catch globally to prevent noise
+                        window.onerror = function(msg, url, line) {
+                            // console.log('Suppressed error:', msg);
+                            return true; // Suppress default error handling
+                        };
+                    } catch(e) {}
+                })();
+            </script>
+        `;
+
+        // Inject Base Tag & Shim
         if (processedHtml.includes('<head>')) {
-            processedHtml = processedHtml.replace('<head>', `<head><base href="${url}" />`);
+            processedHtml = processedHtml.replace('<head>', `<head><base href="${url}" />${safetyShim}`);
         } else {
-            processedHtml = `<base href="${url}" />` + processedHtml;
+            processedHtml = `<base href="${url}" />${safetyShim}` + processedHtml;
         }
 
-        // Inject Inspection Script
+        // Inject Inspection Script (At the end to ensure DOM is ready for inspector)
         const scriptUrl = `${baseUrl}/js/inspect-script.js`;
         const scriptTag = `<script src="${scriptUrl}"></script>`;
         if (processedHtml.includes('</body>')) {
