@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Button } from '../../../ui/Button';
+import { useInspector } from '../../../../context/InspectorContext';
 import type { MediaAsset } from '../../../../types';
 
 interface SourcesTabProps {
@@ -10,7 +11,11 @@ export default function SourcesTab({ url }: SourcesTabProps) {
     const [assets, setAssets] = useState<MediaAsset[]>([]);
     const [openCategories, setOpenCategories] = useState({ image: true, video: true, audio: true });
 
+    const { refreshKey } = useInspector();
+
     useEffect(() => {
+        setAssets([]); // Clear assets on url change or refresh
+
         const handler = (event: MessageEvent) => {
             if (event.data?.type === 'MEDIA_FOUND') {
                 setAssets(event.data.payload);
@@ -25,7 +30,7 @@ export default function SourcesTab({ url }: SourcesTabProps) {
         }
 
         return () => window.removeEventListener('message', handler);
-    }, [url]);
+    }, [url, refreshKey]);
 
     const toggleCategory = (key: keyof typeof openCategories) => {
         setOpenCategories(prev => ({ ...prev, [key]: !prev[key] }));

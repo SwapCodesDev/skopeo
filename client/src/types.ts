@@ -11,6 +11,7 @@ export interface ElementData {
     children: { tagName: string; id: string; className: string }[];
     hasParent: boolean;
     tree?: TreeNode;
+    xpath?: string;
 }
 
 export interface TreeNode {

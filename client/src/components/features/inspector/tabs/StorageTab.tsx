@@ -1,11 +1,13 @@
 import { useState, useEffect } from 'react';
 import { Button } from '../../../ui/Button';
+import { useInspector } from '../../../../context/InspectorContext';
 import type { StorageItem } from '../../../../types';
 
 export default function StorageTab() {
     const [cookies, setCookies] = useState<StorageItem[]>([]);
     const [localStorage, setLocalStorage] = useState<StorageItem[]>([]);
     const [activeView, setActiveView] = useState<'cookies' | 'local'>('cookies');
+    const { refreshKey } = useInspector();
 
     const scanStorage = () => {
         // Since we are in an iframe (or accessing one), accessing storage directly might be blocked or tricky.
@@ -35,7 +37,7 @@ export default function StorageTab() {
         setTimeout(scanStorage, 1000);
 
         return () => window.removeEventListener('message', handler);
-    }, []);
+    }, [refreshKey]);
 
     const data = activeView === 'cookies' ? cookies : localStorage;
 

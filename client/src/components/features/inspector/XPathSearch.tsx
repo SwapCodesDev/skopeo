@@ -1,12 +1,20 @@
+import { useState, useEffect } from 'react';
 import { Button } from '../../ui/Button';
 import { Input } from '../../ui/Input';
 
 interface XPathSearchProps {
     error: string | null;
     setError: (err: string | null) => void;
+    initialValue?: string;
 }
 
-export const XPathSearch = ({ error, setError }: XPathSearchProps) => {
+export const XPathSearch = ({ error, setError, initialValue = '' }: XPathSearchProps) => {
+    const [value, setValue] = useState(initialValue);
+
+    useEffect(() => {
+        setValue(initialValue || '');
+    }, [initialValue]);
+
     const handleSearch = (val: string) => {
         setError(null);
         const iframes = document.getElementsByTagName('iframe');
@@ -17,22 +25,25 @@ export const XPathSearch = ({ error, setError }: XPathSearchProps) => {
 
     return (
         <div className="space-y-2 mb-4">
-            <div className="flex gap-2 items-end">
-                <Input
-                    placeholder="Locate by XPath..."
-                    error={error || undefined}
-                    onKeyDown={(e) => {
-                        if (e.key === 'Enter') handleSearch(e.currentTarget.value);
-                    }}
-                    onChange={() => setError(null)}
-                />
+            <div className="flex gap-2 items-start">
+                <div className="flex-1">
+                    <Input
+                        placeholder="Locate by XPath..."
+                        value={value}
+                        error={error || undefined}
+                        onKeyDown={(e) => {
+                            if (e.key === 'Enter') handleSearch(e.currentTarget.value);
+                        }}
+                        onChange={(e) => {
+                            setValue(e.target.value);
+                            setError(null);
+                        }}
+                    />
+                </div>
                 <Button
                     size="sm"
-                    className="mb-[22px]" // Align with input height minus error gap
-                    onClick={(e) => {
-                        const input = e.currentTarget.previousElementSibling?.querySelector('input') as HTMLInputElement;
-                        if (input) handleSearch(input.value);
-                    }}
+                    className="mt-0 h-[38px]" // Match Input height (assuming standard input height is around 38px/40px or configured similarly)
+                    onClick={() => handleSearch(value)}
                 >
                     Find
                 </Button>

@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import type { ConsoleLog } from '../../../../types';
 import { Button } from '../../../ui/Button';
+import { useInspector } from '../../../../context/InspectorContext';
 
 interface ConsoleTabProps {
     url?: string;
@@ -10,10 +11,12 @@ export default function ConsoleTab({ url }: ConsoleTabProps) {
     const [logs, setLogs] = useState<ConsoleLog[]>([]);
     const endRef = useRef<HTMLDivElement>(null);
 
-    // Clear logs when URL changes
+    const { refreshKey } = useInspector();
+
+    // Clear logs when URL changes or refresh triggered
     useEffect(() => {
         setLogs([]);
-    }, [url]);
+    }, [url, refreshKey]);
 
     useEffect(() => {
         const handler = (event: MessageEvent) => {

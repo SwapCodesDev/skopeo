@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import type { NetworkRequest } from '../../../../types';
 import { Button } from '../../../ui/Button';
+import { useInspector } from '../../../../context/InspectorContext';
 
 type FilterType = 'all' | 'fetch' | 'xhr' | 'js' | 'css' | 'img' | 'media' | 'doc';
 
@@ -9,6 +10,12 @@ export default function NetworkTab() {
     const [selectedId, setSelectedId] = useState<string | null>(null);
     const [filter, setFilter] = useState<FilterType>('all');
     const [activeDetailTab, setActiveDetailTab] = useState<'headers' | 'payload' | 'response'>('headers');
+    const { refreshKey } = useInspector();
+
+    useEffect(() => {
+        setRequests([]);
+        setSelectedId(null);
+    }, [refreshKey]);
 
     useEffect(() => {
         const handler = (event: MessageEvent) => {

@@ -4,7 +4,7 @@ import { useLayout } from '../../../context/LayoutContext';
 import { useToast } from '../../common/Toast';
 
 export default function Preview() {
-    const { url, setUrl, setSelectedElement, inspectMode } = useInspector();
+    const { url, setUrl, setSelectedElement, inspectMode, refreshKey } = useInspector();
     const { setIsMobileOpen } = useLayout();
     const [inputUrl, setInputUrl] = useState(url);
     const iframeRef = useRef<HTMLIFrameElement>(null);
@@ -15,6 +15,15 @@ export default function Preview() {
     useEffect(() => {
         setInputUrl(url);
     }, [url]);
+
+    // Reload iframe on refresh trigger
+    useEffect(() => {
+        if (url && iframeRef.current) {
+            setLoading(true);
+            // Force reload by resetting src (or standard reload method)
+            iframeRef.current.src = iframeRef.current.src;
+        }
+    }, [refreshKey]);
 
     useEffect(() => {
         const handler = (event: MessageEvent) => {

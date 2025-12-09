@@ -8,6 +8,8 @@ interface InspectorContextType {
     setSelectedElement: (element: ElementData | null) => void;
     inspectMode: boolean;
     setInspectMode: (mode: boolean) => void;
+    refreshKey: number;
+    triggerRefresh: () => void;
 }
 
 const InspectorContext = createContext<InspectorContextType | undefined>(undefined);
@@ -16,6 +18,12 @@ export function InspectorProvider({ children }: { children: ReactNode }) {
     const [url, setUrl] = useState('');
     const [selectedElement, setSelectedElement] = useState<ElementData | null>(null);
     const [inspectMode, setInspectMode] = useState(true);
+    const [refreshKey, setRefreshKey] = useState(0);
+
+    const triggerRefresh = () => {
+        setRefreshKey(prev => prev + 1);
+        setSelectedElement(null); // Clear selection on refresh
+    };
 
     return (
         <InspectorContext.Provider
@@ -26,6 +34,8 @@ export function InspectorProvider({ children }: { children: ReactNode }) {
                 setSelectedElement,
                 inspectMode,
                 setInspectMode,
+                refreshKey,
+                triggerRefresh,
             }}
         >
             {children}

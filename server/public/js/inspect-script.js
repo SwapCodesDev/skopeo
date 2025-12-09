@@ -92,6 +92,24 @@
         };
     }
 
+    function getXPath(element) {
+        if (element.id !== '')
+            return `//*[@id="${element.id}"]`;
+        if (element === document.body)
+            return '/html/body';
+
+        var ix = 0;
+        var siblings = element.parentNode.childNodes;
+        for (var i = 0; i < siblings.length; i++) {
+            var sibling = siblings[i];
+            if (sibling === element)
+                return getXPath(element.parentNode) + '/' + element.tagName.toLowerCase() + '[' + (ix + 1) + ']';
+            if (sibling.nodeType === 1 && sibling.tagName === element.tagName)
+                ix++;
+        }
+        return '';
+    }
+
     function sendElementData(el) {
         currentSelection = el;
         const data = {
@@ -105,6 +123,7 @@
                 return acc;
             }, {}),
             selector: getFullSelector(el),
+            xpath: getXPath(el),
             rect: el.getBoundingClientRect(),
             hasParent: !!el.parentElement,
             children: Array.from(el.children).map(c => ({

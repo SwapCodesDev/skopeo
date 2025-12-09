@@ -4,23 +4,26 @@ import SourcesTab from './tabs/SourcesTab';
 import ConsoleTab from './tabs/ConsoleTab';
 import NetworkTab from './tabs/NetworkTab';
 import StorageTab from './tabs/StorageTab';
-import { HistoryManager } from './HistoryManager';
+import { AppMenu } from './AppMenu';
 import { useInspector } from '../../../context/InspectorContext';
 
 type Tab = 'elements' | 'console' | 'sources' | 'network' | 'storage';
 
 export default function InspectorPanel() {
-    const { selectedElement, inspectMode, setInspectMode, url, setUrl } = useInspector();
+    const { selectedElement, inspectMode, setInspectMode, url } = useInspector();
     const [activeTab, setActiveTab] = useState<Tab>('elements');
 
     return (
         <div className="flex flex-col h-full bg-gray-950/80 backdrop-blur-xl border-l border-gray-800/50 text-gray-300 w-full">
             {/* Main Header */}
-            <div className="shrink-0 p-3 border-b border-white/5 bg-gray-900/40 backdrop-blur-md">
+            <div className="shrink-0 p-3 border-b border-white/5 bg-gray-900/40 backdrop-blur-md relative z-50">
                 <div className="flex justify-between items-center mb-3">
-                    <h2 className="font-bold text-lg bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent tracking-tight">
-                        Skopeo DevTools
-                    </h2>
+                    <div className="flex items-center gap-3">
+                        <h2 className="font-bold text-lg bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent tracking-tight">
+                            Skopeo DevTools
+                        </h2>
+                    </div>
+                    <AppMenu />
                 </div>
 
                 {/* Scrollable Tabs */}
@@ -47,7 +50,6 @@ export default function InspectorPanel() {
 
             {/* Tab Content */}
             <div className="flex-1 overflow-y-auto p-4 scrollbar-thin scrollbar-thumb-gray-800 scrollbar-track-transparent">
-                <HistoryManager currentUrl={url} onSelectUrl={setUrl} />
 
                 {activeTab === 'elements' && (
                     <ElementsTab
